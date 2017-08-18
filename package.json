@@ -1,0 +1,9 @@
+{
+  "name": "ayano",
+  "version": "0.0.1",
+  "description": "a command to create react app",
+  "main": "index.js",
+  "repository": "https://github.com/guoshencheng/ayano",
+  "author": "century guo",
+  "license": "MIT"
+}
