@@ -3,6 +3,7 @@
     "bootstrap": "lerna bootstrap --npm-client=yarn --concurrency=1",
     "publish": "lerna publish"
   },
+  "license": "MIT",
   "devDependencies": {
     "lerna": "^2.0.0"
   }

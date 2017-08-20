@@ -16,7 +16,7 @@ import { choosePort, createCompiler, prepareProxy, prepareUrls } from 'react-dev
 import openBrowser from 'react-dev-utils/openBrowser';
 
 import paths from '../config/paths.js';
-import config from '../config/webpack.dev.config.js';
+import config from '../config/webpack.config.dev.js';
 import createDevServerConfig from '../config/webpackDevServer.config.js';
 
 module.exports = () => {

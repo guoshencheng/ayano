@@ -6,13 +6,14 @@ const chalk = require('chalk');
 
 const init = require('../lib/scripts/init');
 const start = require('../lib/scripts/start');
+const build = require('../lib/scripts/build');
 
 program.version(packageJson.version)
 program.command('init').action((name) => {
   init(name);
 })
 program.command('build').action(() => {
-  console.log(chalk.red('build'))
+  build()
 })
 program.command('publish').action(() => {
   console.log(chalk.red('publish'))
