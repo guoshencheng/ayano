@@ -1,14 +1,14 @@
 {
   "name": "ayano-script",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
     "dev": "babel src -d lib --presets=es2015 -w",
     "prepublish": "npm run build"
   },
-  "bin": "lib/index.js",
-  "main": "lib/index.js",
+  "bin": "bin/index.js",
+  "main": "bin/index.js",
   "repository": "https://github.com/guoshencheng/ayano",
   "author": "century guo",
   "license": "MIT",
