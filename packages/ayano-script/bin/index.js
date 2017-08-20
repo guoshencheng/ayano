@@ -1,13 +1,14 @@
 #! /usr/bin/env node
 
-import program from 'commander';
-import packageJson from '../package.json';
-import chalk from 'chalk';
+const program = require('commander');
+const packageJson = require('../package.json');
+const chalk = require('chalk');
 
-import init from './scripts/init';
+const init = require('../lib/scripts/init');
+const start = require('../lib/scripts/start');
 
 program.version(packageJson.version)
-program.command('init <name>').action((name) => {
+program.command('init').action((name) => {
   init(name);
 })
 program.command('build').action(() => {
@@ -17,7 +18,7 @@ program.command('publish').action(() => {
   console.log(chalk.red('publish'))
 })
 program.command('start').action(() => {
-  console.log(chalk.red('start'))
+  start();
 })
 
 program.parse(process.argv);

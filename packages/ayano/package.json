@@ -1,0 +1,24 @@
+{
+  "name": "ayano",
+  "version": "0.0.2",
+  "description": "a command to create react app",
+  "scripts": {
+    "build": "babel src -d lib --presets=es2015",
+    "dev": "babel src -d lib --presets=es2015 -w",
+    "prepublish": "npm run build"
+  },
+  "bin": "bin/index.js",
+  "main": "lib/index.js",
+  "repository": "https://github.com/guoshencheng/ayano",
+  "author": "century guo",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "commander": "^2.11.0",
+    "react-dev-utils": "^3.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1"
+  }
+}
