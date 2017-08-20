@@ -1,0 +1,18 @@
+{
+  "name": "ayano",
+  "version": "0.0.1",
+  "description": "a command to create react app",
+  "scripts": {},
+  "bin": "bin/index.js",
+  "main": "lib/index.js",
+  "repository": "https://github.com/guoshencheng/ayano",
+  "author": "century guo",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.1.0",
+    "commander": "^2.11.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0"
+  }
+}
