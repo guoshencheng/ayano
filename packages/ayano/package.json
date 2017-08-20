@@ -1,6 +1,6 @@
 {
   "name": "ayano",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
