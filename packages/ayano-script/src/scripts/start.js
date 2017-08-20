@@ -41,10 +41,10 @@ module.exports = () => {
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
     const serverConfig = createDevServerConfig(
       proxyConfig,
-      urls.lanUrlForConfig
+      urls.lanUrlForConfig,
+      config.publicPath
     );
     const devServer = new webpackDevServer(compiler, serverConfig);
-    console.log(webpackDevServer)
     devServer.listen(port, HOST, err => {
       if (err) {
         return console.log(err);
