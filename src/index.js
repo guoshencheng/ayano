@@ -5,6 +5,7 @@ import packageJson from '../package.json';
 import chalk from 'chalk';
 
 import init from './scripts/init';
+import start from './scripts/start';
 
 program.version(packageJson.version)
 program.command('init <name>').action((name) => {
@@ -17,7 +18,7 @@ program.command('publish').action(() => {
   console.log(chalk.red('publish'))
 })
 program.command('start').action(() => {
-  console.log(chalk.red('start'))
+  start();
 })
 
 program.parse(process.argv);
