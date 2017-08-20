@@ -42,7 +42,7 @@ module.exports = () => {
     const serverConfig = createDevServerConfig(
       proxyConfig,
       urls.lanUrlForConfig,
-      config.publicPath
+      config.output.publicPath
     );
     const devServer = new webpackDevServer(compiler, serverConfig);
     devServer.listen(port, HOST, err => {
