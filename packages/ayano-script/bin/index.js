@@ -8,7 +8,7 @@ const init = require('../lib/scripts/init');
 const start = require('../lib/scripts/start');
 
 program.version(packageJson.version)
-program.command('init <name>').action((name) => {
+program.command('init').action((name) => {
   init(name);
 })
 program.command('build').action(() => {

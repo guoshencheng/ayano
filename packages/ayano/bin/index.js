@@ -2,8 +2,14 @@
 
 const program = require('commander');
 const packageJson = require('../package.json');
+const spawn = require('react-dev-utils/crossSpawn');
 const chalk = require('chalk');
 const cwd = process.cwd();
+const fs = require('fs');
+const path = require('path');
+const { shouldUseYarn } = require('../lib/utils.js');
+
+const useYarn = shouldUseYarn()
 
 const dependencies = (options) => {
   return ['react', 'react-dom'];
@@ -23,8 +29,7 @@ const buildPackageJson = (name, options) => {
   return {
     name,
     version: '0.1.0',
-    private: true,
-    scripts: buildScripts(options)
+    private: true
   }
 }
 
@@ -37,12 +42,13 @@ const installDependencies = () => {
     command = 'npm';
     args = ['install', '--save', '--verbose'].filter(e => e);
   }
-  args = args.concat(dependencies());
+  args = args.concat(dependencies(), devDependencies());
   const proc = spawn.sync(command, args, { stdio: 'inherit' });
   if (proc.status !== 0) {
     console.error(`\`${command} ${args.join(' ')}\` failed`);
     process.exit(1);
   }
+}
 
 const createDir = (name, options) => {
   try {
@@ -60,9 +66,15 @@ const createDir = (name, options) => {
 
 program.version(packageJson.version)
 program.command('init <name>').action((name) => {
+  const root = path.resolve(cwd, name);
   createDir(name);
   process.chdir(root);
   const currentPath = process.cwd();
+  renderPackageJson(name);
+  installDependencies()
+  const initScriptPath = path.resolve(currentPath, 'node_modules', 'ayano-script', 'lib/scripts/init.js');
+  const init = require(initScriptPath);
+  init();
 })
 
 program.parse(process.argv);
