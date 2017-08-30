@@ -30,7 +30,7 @@ var cssLoader = {
 production.entry = Object.keys(base.entry).reduce((pre, cur) => {
   const obj = base.entry[cur];
   if (Array.isArray(obj)) {
-    return Object.assign(pre, { [cur]: obj.filter((v) => v != "webpack-hot-middleware/client") })
+    return Object.assign(pre, { [cur]: obj.filter((v, index) => index != 0) })
   } else {
     return Object.assign(pre, { [cur]: obj })
   }

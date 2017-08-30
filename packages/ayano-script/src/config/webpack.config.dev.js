@@ -23,7 +23,10 @@ var postcssLoader = {
 
 module.exports = {
   entry: {
-    main: paths.appIndexJs
+    main: [
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appIndexJs
+    ]
   },
   resolve: {
     extensions: ['.web.js', '.js', '.json'],
