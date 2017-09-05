@@ -1,0 +1,15 @@
+{
+  "name": "example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ayano-script": "^0.0.12",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "scripts": {
+    "start": "ayano-script start",
+    "build": "ayano-script build",
+    "publish": "ayano-script publish"
+  }
+}

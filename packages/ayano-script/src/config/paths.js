@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs';
 import url from 'url';
-
 const appDirectory = process.cwd();
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 

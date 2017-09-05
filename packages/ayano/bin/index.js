@@ -7,7 +7,9 @@ const chalk = require('chalk');
 const cwd = process.cwd();
 const fs = require('fs');
 const path = require('path');
-const { shouldUseYarn } = require('../lib/utils.js');
+const { shouldUseYarn, shouldUseCNPM } = require('../lib/utils.js');
+
+const useCNpm = shouldUseCNPM();
 
 const useYarn = shouldUseYarn()
 
@@ -35,14 +37,19 @@ const buildPackageJson = (name, options) => {
 
 const installDependencies = () => {
   let command, args;
-  if (useYarn) {
+  if (useCNpm) {
+    command = 'cnpm';
+    args = ['install', '--save'].filter(e => e);
+  } else if (useYarn) {
     command = 'yarn';
     args = ['add']
   } else {
     command = 'npm';
-    args = ['install', '--save', '--verbose'].filter(e => e);
+    args = ['install', '--save'].filter(e => e);
   }
   args = args.concat(dependencies(), devDependencies());
+  console.log(chalk.green(`find command ${command} available`));
+  console.log(chalk.green(`exec command ${ command + " " + args.join(" ") }`));
   const proc = spawn.sync(command, args, { stdio: 'inherit' });
   if (proc.status !== 0) {
     console.error(`\`${command} ${args.join(' ')}\` failed`);
