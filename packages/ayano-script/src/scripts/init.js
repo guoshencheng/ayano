@@ -2,8 +2,9 @@ import fs from 'fs-extra';
 import chalk from 'chalk';
 import path from 'path';
 const spawn = require('react-dev-utils/crossSpawn');
-import { shouldUseYarn } from '../utls.js';
+import { shouldUseYarn, shouldUseCNPM } from '../utls.js';
 const useYarn = shouldUseYarn();
+const useCNpm = shouldUseCNPM();
 
 const buildScripts = () => ({
   start: 'ayano-script start',
@@ -26,8 +27,35 @@ const copyTemplate = (target) => {
   fs.copySync(templatePath, target);
 }
 
+const devDependencies = (options) => {
+  return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk'];
+}
+
+const installDependencies = () => {
+  let command, args;
+  if (useCNpm) {
+    command = 'cnpm';
+    args = ['install', '--save'].filter(e => e);
+  } else if (useYarn) {
+    command = 'yarn';
+    args = ['add']
+  } else {
+    command = 'npm';
+    args = ['install', '--save'].filter(e => e);
+  }
+  args = args.concat(devDependencies());
+  console.log(chalk.green(`find command ${command} available`));
+  console.log(chalk.green(`exec command ${ command + " " + args.join(" ") }`));
+  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  if (proc.status !== 0) {
+    console.error(`\`${command} ${args.join(' ')}\` failed`);
+    process.exit(1);
+  }
+}
+
 module.exports = (options) => {
   const cwd = process.cwd();
   changePackageJson(cwd)
   copyTemplate(cwd);
+  installDependencies();
 };

@@ -1,0 +1,12 @@
+@import "../../define.scss";
+
+#home-page {
+  padding: 100px;
+  h1 {
+    font-weight: lighter;
+  }
+  h4 {
+    font-weight: lighter;
+    color: $normal-text-color;
+  }
+}
