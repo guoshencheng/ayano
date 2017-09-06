@@ -1,7 +1,10 @@
-import webpack from 'webpack';
-import path from 'path';
-import pxtorem from 'postcss-pxtorem';
-import paths from './paths.js';
+const webpack = require('webpack');
+const path = require('path');
+const pxtorem = require('postcss-pxtorem');
+const paths = require('./paths.js');
+const appDirectory = process.cwd();
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const appIndexJs = resolveApp('src/index.js');
 
 const babelPlugin = [["import", [{ "style": "css", "libraryName": "antd-mobile" }]]];
 const svgDirs = [
@@ -25,7 +28,7 @@ module.exports = {
   entry: {
     main: [
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appIndexJs
+      appIndexJs
     ]
   },
   resolve: {
