@@ -3,23 +3,62 @@
 const program = require('commander');
 const packageJson = require('../package.json');
 const chalk = require('chalk');
+const path = require('path');
+const fs = require('fs');
 
 const init = require('../lib/scripts/init');
 const start = require('../lib/scripts/start');
 const build = require('../lib/scripts/build');
+const outputConfig = require('../lib/scripts/outputConfig.js');
 
-program.version(packageJson.version)
+program.version(packageJson.version);
+
 program.command('init').action((name) => {
   init(name);
 })
-program.command('build').action(() => {
-  build()
+program.command('build')
+.option('-c, --config [config]', "webpack config file path").action((command) => {
+  const { config } = command;
+  if (config) {
+    const cwd = process.cwd();
+    let configPath = path.resolve(cwd, config);
+    if (!fs.existsSync(configPath)) {
+      configPath = void 6;
+      console.log(chalk.red(`config file at ${config} is not exist! use default config!`))
+    } else {
+      console.log(chalk.green(`use config file at ${config} !`))
+    }
+    build(configPath)
+  } else {
+    build();
+  }
 })
+
+program.command('outputConfig')
+.action(() => {
+  outputConfig()
+});
+
 program.command('publish').action(() => {
   console.log(chalk.red('publish'))
 })
-program.command('start').action(() => {
-  start();
+
+program.command('start')
+.option('-c, --config [config]', "webpack config file path").action((command) => {
+  const { config } = command;
+  if (config) {
+    const cwd = process.cwd();
+    let configPath = path.resolve(cwd, config);
+    if (!fs.existsSync(configPath)) {
+      configPath = void 6;
+      console.log(chalk.red(`config file at ${config} is not exist! use default config!`))
+    } else {
+      console.log(chalk.green(`use config file at ${config} !`))
+    }
+    start(configPath);
+  } else {
+    start();
+  }
 })
 
 program.parse(process.argv);

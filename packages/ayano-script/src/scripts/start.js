@@ -16,10 +16,10 @@ import { choosePort, createCompiler, prepareProxy, prepareUrls } from 'react-dev
 import openBrowser from 'react-dev-utils/openBrowser';
 
 import paths from '../config/paths.js';
-import config from '../config/webpack.config.dev.js';
 import createDevServerConfig from '../config/webpackDevServer.config.js';
 
-module.exports = () => {
+module.exports = (configPath) => {
+  const config = require(configPath || '../config/webpack.config.dev.js')
   const useYarn = fs.existsSync(paths.yarnLockFile);
   const isInteractive = process.stdout.isTTY;
 

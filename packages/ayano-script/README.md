@@ -9,10 +9,41 @@ ayano is a character at [《目隐都市的演绎者》](http://bangumi.bilibili
 ### Quik start
 
 ```bash
+npm install -g ayano
+```
+```bash
 ayano init <name>
 cd <name>
 npm start
 ```
+
+### ayano-script
+
+###### start
+
+```bash
+ayano-script start //start app with a webpack devServer
+```
+ayano has inner webpack config file, you can use `--config -c [path]` to use custom config file
+
+###### build
+
+```bash
+ayano-script build // build app
+```
+ayano has inner webpack config file, you can use `--config -c [path]` to use custom config file
+
+
+###### outputConfig
+
+```bash
+ayano-script outputConfig
+```
+This command will out put innner config file to current dir
+
+###### Proxy
+
+Add proxy settings to `package.json`, about config, to see [webpack devServer proxy](https://webpack.js.org/configuration/dev-server/#devserver-proxy)
 
 ### AyanoReact
 
