@@ -1,8 +1,7 @@
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Toast, Popup } from 'antd-mobile';
-import { createApp } from './package/index.js';
-import * as p from './package';
+import { createApp } from 'ayano-react';
 import reducers from './scripts/reducers';
 import Home from './views/Home/Home.js';
 import { repo } from './scripts/actions';

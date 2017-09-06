@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { connectApp } from '../../package/index.js';
+import { connectApp } from 'ayano-react';
 import './Home.scss';
 
 class Home extends Component {

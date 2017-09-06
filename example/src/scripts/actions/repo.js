@@ -1,6 +1,6 @@
 import apis, { keys, methods } from '../apis';
 import constants from '../constants.js';
-import { request } from '../../package';
+import { request } from 'ayano-react';
 
 const req = request(apis);
 

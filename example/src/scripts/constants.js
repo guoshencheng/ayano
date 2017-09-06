@@ -1,4 +1,4 @@
-import { buildConstants } from '../package';
+import { buildConstants } from 'ayano-react';
 
 export default buildConstants([{
   key: "REPO",

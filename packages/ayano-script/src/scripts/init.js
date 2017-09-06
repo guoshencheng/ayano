@@ -28,7 +28,8 @@ const copyTemplate = (target) => {
 }
 
 const devDependencies = (options) => {
-  return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk', 'redux-devtools-extension', 'axios'];
+  return 'ayano-react';
+  // return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk', 'redux-devtools-extension', 'axios'];
 }
 
 const installDependencies = () => {
