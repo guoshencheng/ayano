@@ -28,20 +28,20 @@ const copyTemplate = (target) => {
 }
 
 const devDependencies = (options) => {
-  return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk'];
+  return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk', 'redux-devtools-extension', 'axios'];
 }
 
 const installDependencies = () => {
   let command, args;
   if (useCNpm) {
     command = 'cnpm';
-    args = ['install', '--save'].filter(e => e);
+    args = ['install', '--save-dev'].filter(e => e);
   } else if (useYarn) {
     command = 'yarn';
-    args = ['add']
+    args = ['add', '--dev']
   } else {
     command = 'npm';
-    args = ['install', '--save'].filter(e => e);
+    args = ['install', '--save-dev'].filter(e => e);
   }
   args = args.concat(devDependencies());
   console.log(chalk.green(`find command ${command} available`));

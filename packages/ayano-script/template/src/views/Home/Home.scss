@@ -6,7 +6,13 @@
     font-weight: lighter;
   }
   h4 {
+    width: 100%;
     font-weight: lighter;
     color: $normal-text-color;
+    pre {
+      width: 100%;
+      white-space: pre-wrap;       /* Since CSS 2.1 */
+      word-wrap: break-word;
+    }
   }
 }

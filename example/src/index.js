@@ -2,15 +2,21 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { Toast, Popup } from 'antd-mobile';
 import { createApp } from './package/index.js';
+import * as p from './package';
 import reducers from './scripts/reducers';
 import Home from './views/Home/Home.js';
+import { repo } from './scripts/actions';
 import './index.scss';
 
 const routers = [{
   path: '/',
-  component: Home
+  component: Home,
 }]
 
-const app = createApp({ reducers, routers });
+const app = createApp({ reducers, routers,
+  actions: {
+    repo
+  }
+});
 
 app.start(document.querySelector('#root'));

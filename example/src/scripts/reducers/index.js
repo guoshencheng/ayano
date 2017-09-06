@@ -1,3 +1,6 @@
-module.exports = (state = {}, action) => {
-  return state;
-};
+import { combineReducers } from 'redux';
+import repo from './repo';
+
+export default combineReducers({
+  repo
+})
