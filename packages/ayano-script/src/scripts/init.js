@@ -5,6 +5,7 @@ const spawn = require('react-dev-utils/crossSpawn');
 import { shouldUseYarn, shouldUseCNPM } from '../utls.js';
 const useYarn = shouldUseYarn();
 const useCNpm = shouldUseCNPM();
+process.env.SASS_BINARY_SITE = "https://npm.taobao.org/mirrors/node-sass"
 
 const buildScripts = () => ({
   start: 'ayano-script start',
@@ -12,11 +13,26 @@ const buildScripts = () => ({
   publish: 'ayano-script publish'
 })
 
+const buildayanoConfigTemp = () => ({
+  resourcePrefix: "https://dn-mhc.qbox.me/faw/js/",
+  resourceDescribeFileName: "resources.json"
+})
+
+const buildayanoPublishConfigTemp = () => ({
+    "type": "1",
+    "server": "",
+    "appId": "<your app id>",
+    "htmlPath": "./index.html",
+    "resourceFile": "./resources.json",
+})
+
 const changePackageJson = (cwd) => {
   const packageJsonPath = path.join(cwd, 'package.json');
   const origin = require(packageJsonPath);
   const target = Object.assign({}, origin, {
-    scripts: buildScripts()
+    scripts: buildScripts(),
+    "ayano-config": buildayanoConfigTemp(),
+    "ayano-publish-config": buildayanoPublishConfigTemp()
   })
   fs.writeFileSync(packageJsonPath, JSON.stringify(target, null, 2))
   console.log(target)
@@ -36,10 +52,10 @@ const installDependencies = () => {
   let command, args;
   if (useCNpm) {
     command = 'cnpm';
-    args = ['install', '--save-dev'].filter(e => e);
-  } else if (useYarn) {
-    command = 'yarn';
-    args = ['add', '--dev']
+    args = ['install', '--by=npm', '--save-dev'].filter(e => e);
+  // } else if (useYarn) {
+  //   command = 'yarn';
+  //   args = ['add', '--dev']
   } else {
     command = 'npm';
     args = ['install', '--save-dev'].filter(e => e);
@@ -47,7 +63,10 @@ const installDependencies = () => {
   args = args.concat(devDependencies());
   console.log(chalk.green(`find command ${command} available`));
   console.log(chalk.green(`exec command ${ command + " " + args.join(" ") }`));
-  const proc = spawn.sync(command, args, { stdio: 'inherit' });
+  const proc = spawn.sync(command, args, {
+    stdio: 'inherit',
+    env: process.env,
+  });
   if (proc.status !== 0) {
     console.error(`\`${command} ${args.join(' ')}\` failed`);
     process.exit(1);

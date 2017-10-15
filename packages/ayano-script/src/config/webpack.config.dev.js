@@ -5,22 +5,35 @@ const paths = require('./paths.js');
 const appDirectory = process.cwd();
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 const appIndexJs = resolveApp('src/index.js');
+const appPackageJson = resolveApp('package.json');
 
-const babelPlugin = [["import", [{ "style": "css", "libraryName": "antd-mobile" }]]];
+var packageJson;
+try {
+  packageJson = require(appPackageJson) || {};
+} catch (e) {
+}
+
+var ayanoConfig = packageJson['ayano-config'] || {};
+var disablePx2Rem = ayanoConfig['disablePx2Rem'];
+
 const svgDirs = [
   require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
 ];
+
+var postcssPlugins = [];
+
+if (!disablePx2Rem) {
+  postcssPlugins = postcssPlugins.concat([pxtorem({
+    rootValue: 100,
+    propWhiteList: [], // don't use propList.
+  })])
+}
 
 var postcssLoader = {
   loader: "postcss-loader",
   options: {
     postcss: {},
-    plugins: (loader) => [
-      pxtorem({
-        rootValue: 100,
-        propWhiteList: [], // don't use propList.
-      })
-    ]
+    plugins: (loader) => postcssPlugins
   }
 }
 
@@ -56,11 +69,9 @@ module.exports = {
       },
       {
         test: /.jsx?$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          presets: ['es2015', 'react'],
-          plugins: babelPlugin
+        use: {
+          loader: 'babel-loader',
         }
       },
       {

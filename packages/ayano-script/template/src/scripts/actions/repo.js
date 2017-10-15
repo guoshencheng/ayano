@@ -1,14 +1,14 @@
-import apis, { keys, methods } from '../apis';
-import constants from '../constants.js';
-import { request } from 'ayano-react';
+import { Toast } from 'antd-mobile';
 
-const req = request(apis);
-
-export const fetchRepo = () => (dispatch, getState) => {
-  req(keys.repo).then(data => {
-    dispatch({
-      type: constants.REPO.FINISH_FETCH,
-      data
-    })
-  })
+export const fetchRepo = () => ({ apis, actions, constants })=> {
+  Toast.loading('加载中...', 0);
+  apis.repo().then(data => {
+    actions.reducerActions.repo.FINISH_FETCH({ data });
+    Toast.success('加载成功', 1);
+    console.warn( ` the dispath will be desprecated in the feature, use auto mode and _reducers props instead`);
+    // dispatch({
+    //   type: constants.repo.FINISH_FETCH,
+    //   data
+    // })
+  });
 }

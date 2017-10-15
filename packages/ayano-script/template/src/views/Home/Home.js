@@ -18,7 +18,7 @@ class Home extends Component {
     const { url, login } = owner;
     return (
       <div id="home-page">
-        <h1>welcome to Ayano app!</h1>
+        <h1>welcome to ayano app!</h1>
         <h4>
           Try to replace home page code at:
           <pre>src/views/Home/Home.js</pre>

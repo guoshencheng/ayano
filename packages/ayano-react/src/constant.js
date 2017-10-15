@@ -1,5 +1,17 @@
 import { is } from './utils'
 
+export const buildConstantToAction = (constants, build, origin) => {
+  origin = origin || {};
+  return Object.keys(constants).reduce((pre, key) => {
+    if (is.object(constants[key])) {
+      pre[key] = buildConstantToAction(constants[key], build);
+    } else if (is.string(constants[key])) {
+      pre[key] = build(constants[key]);
+    }
+    return pre;
+  }, origin)
+}
+
 export const buildConstants = (tree, prefix = "") => {
   return tree.reduce((pre, item) => {
     if (is.string(item)) {
@@ -15,4 +27,19 @@ export const buildConstants = (tree, prefix = "") => {
       return pre;
     }
   }, {})
+}
+
+
+export const buildConstantsTree = (reducers) => {
+  if (reducers.reducers) reducers = reducers.reducers;
+  return Object.keys(reducers).reduce((pre, key) => {
+    const current = reducers[key];
+    if (is.fn(current)) {
+      return pre.concat([key]);
+    } else if (is.object(current)) {
+      return pre.concat([{
+        key, values: buildConstantsTree(current)
+      }])
+    }
+  }, []);
 }

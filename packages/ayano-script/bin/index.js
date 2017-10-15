@@ -9,6 +9,8 @@ const fs = require('fs');
 const init = require('../lib/scripts/init');
 const start = require('../lib/scripts/start');
 const build = require('../lib/scripts/build');
+const publish = require('../lib/scripts/publish');
+
 const outputConfig = require('../lib/scripts/outputConfig.js');
 
 program.version(packageJson.version);
@@ -39,8 +41,15 @@ program.command('outputConfig')
   outputConfig()
 });
 
-program.command('publish').action(() => {
-  console.log(chalk.red('publish'))
+program.command('publish')
+.option('-m, --comment [comment]')
+.action((command) => {
+  const { comment } = command;
+  if (Object.prototype.toString.call(comment) == '[object String]') {
+    publish(comment);
+  } else {
+    console.log(chalk.red('MISS PARAMS:') + " -m or --comment is required")
+  }
 })
 
 program.command('start')

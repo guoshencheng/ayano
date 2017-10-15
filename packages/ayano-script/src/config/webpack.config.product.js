@@ -3,9 +3,25 @@ var path = require('path')
 var fs = require('fs')
 var base = require('./webpack.config.dev.js');
 var pxtorem = require('postcss-pxtorem');
+const appDirectory = process.cwd();
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+const appPackageJson = resolveApp('./package.json');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var SakuraWebpackPlugin = require('sakura-webpack-plugin');
 var production = Object.assign({}, base);
+
+var packageJson = {};
+
+try {
+  packageJson = require(appPackageJson) || {};
+} catch (e) {
+  packageJson = {};
+  console.log(e)
+}
+
+const ayanoConfig = packageJson['ayano-config'] || { };
+let resourcePrefix = ayanoConfig.resourcePrefix || "";
+let resourceDescribeFileName = ayanoConfig.resourceDescribeFileName || 'resources.json';
 
 var postcssLoader = {
   loader: "postcss-loader",
@@ -65,8 +81,9 @@ production.module.loaders = base.module.loaders.map((value) => {
 
 production.plugins = [
   new SakuraWebpackPlugin({
-    prefix: "http://yourhost/",
-    single: true
+    prefix: resourcePrefix,
+    single: true,
+    resourceFileName: resourceDescribeFileName
   }),
   new webpack.optimize.UglifyJsPlugin({
     compress: {
