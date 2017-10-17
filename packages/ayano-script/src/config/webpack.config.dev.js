@@ -15,10 +15,9 @@ try {
 
 var ayanoConfig = packageJson['ayano-config'] || {};
 var disablePx2Rem = ayanoConfig['disablePx2Rem'];
+var antd = ayanoConfig['antd'];
 
-const svgDirs = [
-  require.resolve('antd-mobile').replace(/warn\.js$/, ''),  // 1. 属于 antd-mobile 内置 svg 文件
-];
+const svgDirs = antd.map(i => require.resolve(i).replace(/warn\.js$/, ''));
 
 var postcssPlugins = [];
 

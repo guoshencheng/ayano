@@ -15,7 +15,8 @@ const buildScripts = () => ({
 
 const buildayanoConfigTemp = () => ({
   resourcePrefix: "https://dn-mhc.qbox.me/faw/js/",
-  resourceDescribeFileName: "resources.json"
+  resourceDescribeFileName: "resources.json",
+  antd: 'antd-mobile'
 })
 
 const buildayanoPublishConfigTemp = () => ({
