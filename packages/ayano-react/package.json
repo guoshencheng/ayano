@@ -1,6 +1,6 @@
 {
   "name": "ayano-react",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "react app creator",
   "main": "dist/index.js",
   "scripts": {

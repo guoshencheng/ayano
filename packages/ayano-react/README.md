@@ -144,3 +144,11 @@ rq('user', { id: 122 }).then(...) // it will request to https://xxx.xxx.xx/user/
 rq('/ayano') // it will request to https://xxx.xxx.xx/ayano because '/ayano' is not at apis
 
 ```
+
+
+### CHANGELOG
+
+#### 20171018
+
+- 在request添加header的定义
+
