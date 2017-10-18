@@ -9,9 +9,9 @@ const _catchError = (error) => {
   console.log(error)
 }
 
-const buildRequestParams = (method, url, data, options) => {
-    let params = Object.assign({}, {
-    method, url,
+const buildRequestParams = (method, url, headers, data, options) => {
+  let params = Object.assign({}, {
+    method, url, headers,
     params: method == "GET" || method == "DELETE" ? data : void 6,
     data: method == "PUT" || method == "POST" ? data : void 6
   }, options)
@@ -24,11 +24,20 @@ const buildRequestParams = (method, url, data, options) => {
   return params;
 }
 
+const buildHeders = (apis, key, data) => {
+  const api = apis[key];
+  if (is.fn(api.headers)) {
+    return api.headers(data)
+  } else {
+    return api.headers;
+  }
+}
+
 const buildUrl = (host, apis, key, data) => {
   if (is.fn(key)) {
     return key(data)
-  } else if (is.fn(apis[key])) {
-    return apis[key](data)
+  } else if (is.fn(apis[key].path)) {
+    return apis[key].path(data)
   } else {
     return `${host}${ apis[key] ? apis[key].path : key}`
   }
@@ -39,7 +48,8 @@ const sendRequest = (apis, key, data, method, options, opt) => {
     const handleResponse = options.handleResponse || opt.handleResponse || _handleResponse;
     const catchError = options.catchError || opt.catchError || _catchError;
     let url = buildUrl(host, apis, key, data);
-    const params = buildRequestParams(method, url, data, options);
+    const headers = buildHeders(apis, key, data);
+    const params = buildRequestParams(method, url, headers, data, options);
     return axios(params).then(handleResponse).catch(catchError)
 }
 
