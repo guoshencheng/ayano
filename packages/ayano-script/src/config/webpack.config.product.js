@@ -20,21 +20,27 @@ try {
 }
 
 const ayanoConfig = packageJson['ayano-config'] || { };
+var disablePx2Rem = ayanoConfig['disablePx2Rem'];
 let resourcePrefix = ayanoConfig.resourcePrefix || "";
 let resourceDescribeFileName = ayanoConfig.resourceDescribeFileName || 'resources.json';
+
+var postcssPlugins = [];
+
+if (!disablePx2Rem) {
+  postcssPlugins = postcssPlugins.concat([pxtorem({
+    rootValue: 100,
+    propWhiteList: [], // don't use propList.
+  })])
+}
 
 var postcssLoader = {
   loader: "postcss-loader",
   options: {
     postcss: {},
-    plugins: (loader) => [
-      pxtorem({
-        rootValue: 100,
-        propWhiteList: [], // don't use propList.
-      })
-    ]
+    plugins: (loader) => postcssPlugins
   }
 }
+
 
 var cssLoader = {
   loader: "css-loader",
