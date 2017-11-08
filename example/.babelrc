@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    [
+      "import",
+      { "style": "css", "libraryName": "antd-mobile" }
+    ],
+  ],
+  "presets": ["es2015", "react"]
+}

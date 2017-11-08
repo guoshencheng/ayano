@@ -3,16 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "ayano-script": "^0.0.12",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1"
+    "ayano-react": "^0.1.10",
+    "ayano-script": "^0.1.15",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
   },
   "scripts": {
     "start": "ayano-script start",
     "build": "ayano-script build",
     "publish": "ayano-script publish"
   },
-  "devDependencies": {
-    "ayano-react": "^0.1.1"
+  "ayano-config": {
+    "resourcePrefix": "https://dn-mhc.qbox.me/faw/js/",
+    "resourceDescribeFileName": "resources.json",
+    "antd": [
+      "antd-mobile"
+    ]
+  },
+  "ayano-publish-config": {
+    "type": "1",
+    "server": "",
+    "appId": "<your app id>",
+    "htmlPath": "./index.html",
+    "resourceFile": "./resources.json"
   }
 }

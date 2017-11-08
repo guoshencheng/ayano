@@ -44,7 +44,7 @@ const copyTemplate = (target) => {
   fs.copySync(templatePath, target);
 }
 
-const devDependencies = (options) => {
+const dependencies = (options) => {
   return 'ayano-react';
   // return ['react-router', 'redux', 'react-redux', 'react-router-redux@next', 'react-router-dom', 'redux-thunk', 'redux-devtools-extension', 'axios'];
 }
@@ -53,15 +53,15 @@ const installDependencies = () => {
   let command, args;
   if (useCNpm) {
     command = 'cnpm';
-    args = ['install', '--by=npm', '--save-dev'].filter(e => e);
+    args = ['install', '--save'].filter(e => e);
   // } else if (useYarn) {
   //   command = 'yarn';
   //   args = ['add', '--dev']
   } else {
     command = 'npm';
-    args = ['install', '--save-dev'].filter(e => e);
+    args = ['install', '--save'].filter(e => e);
   }
-  args = args.concat(devDependencies());
+  args = args.concat(dependencies());
   console.log(chalk.green(`find command ${command} available`));
   console.log(chalk.green(`exec command ${ command + " " + args.join(" ") }`));
   const proc = spawn.sync(command, args, {
