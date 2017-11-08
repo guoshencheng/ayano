@@ -1,6 +1,6 @@
 # Ayano
 
-<img src="./icon.png" alt="" style="width: 80px;">
+<img src="./icon.png" alt="" style="width: 80px;" width="80px">
 
 [中文介绍地址](./README-zhCN.md)
 
