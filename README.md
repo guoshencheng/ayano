@@ -2,6 +2,8 @@
 
 <img src="./icon.png" alt="" style="width: 80px;">
 
+[中文介绍地址](./README-zhCN.md)
+
 ### About project name
 
 ayano is a character at [《目隐都市的演绎者》](http://bangumi.bilibili.com/anime/197?from=search&seid=13569365465150890532)
