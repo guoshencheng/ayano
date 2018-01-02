@@ -2,6 +2,12 @@
 
 <img src="./icon.png" alt="" style="width: 80px;" width="80px">
 
+### 下一步计划
+
+- 减少配置化的创建应用
+- 增加配置的可读性
+- 是用户的配置更加自由化
+
 [中文介绍地址](./README-zhCN.md)
 
 ### About project name
