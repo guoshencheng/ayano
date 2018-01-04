@@ -1,0 +1,27 @@
+{
+  "name": "ayano-utils",
+  "version": "1.0.0",
+  "description": "ayano common utils",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel src -d dist --presets=es2015,react",
+    "dev": "babel src -d dist --presets=es2015,react -w",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guoshencheng/ayano"
+  },
+  "keywords": [
+    "ayano",
+    "uitls"
+  ],
+  "author": "Century Guo",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  }
+}
