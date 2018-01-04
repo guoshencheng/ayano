@@ -1,6 +1,4 @@
-const ObjectString = obj =>  Object.prototype.toString.bind(obj)()
-
-export ObjectString;
+export const ObjectString = obj =>  Object.prototype.toString.bind(obj)()
 
 const _TYPES = ['Object', 'Array', 'String', 'Date', 'Number', 'Function', 'Boolean', 'Null', 'Undefined', 'Regexp'];
 

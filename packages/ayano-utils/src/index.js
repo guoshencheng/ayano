@@ -1,1 +1,3 @@
-export default {}
+import is from './is';
+
+exports.is = is;
