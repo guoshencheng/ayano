@@ -5,7 +5,7 @@ export const npmInstallTag = pacakageJson => packageName => tag => {
     return `${packageName}@${tag}`
   } else {
     if (pacakageJson.related && pacakageJson.related[packageName]) {
-      return `${packageName}@${pacakageJson.related[pacakageName]}`
+      return `${packageName}@${pacakageJson.related[packageName]}`
     } else {
       return packageName;
     }
