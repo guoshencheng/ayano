@@ -1,11 +1,15 @@
 {
   "name": "ayano",
-  "version": "0.1.6",
+  "version": "1.0.0-alpha1",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
     "dev": "babel src -d lib --presets=es2015 -w",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "publish-pre": "npm publish --tag next"
+  },
+  "related": {
+    "ayano-script": "next"
   },
   "bin": "bin/index.js",
   "main": "lib/index.js",

@@ -8,7 +8,7 @@ const cwd = process.cwd();
 const fs = require('fs');
 const path = require('path');
 
-const { shouldUseCNPM, shouldUseYarn } = require('ayano-utils/lib/version.js');
+const { shouldUseCNPM, shouldUseYarn, npmInstallTag } = require('ayano-utils/lib/version.js');
 
 const useCNpm = shouldUseCNPM();
 
@@ -18,8 +18,8 @@ const dependencies = (options) => {
   return ['react', 'react-dom'];
 }
 
-const devDependencies = (options) => {
-  return ['ayano-script'];
+const devDependencies = ({ tag }) => {
+  return [ npmInstallTag(packageJson)('ayano-script')(tag)];
 }
 
 const renderPackageJson = (name, options) => {
@@ -36,19 +36,19 @@ const buildPackageJson = (name, options) => {
   }
 }
 
-const installDependencies = () => {
+const installDependencies = ({ forceNpm, tag }) => {
   let command, args;
-  if (useCNpm) {
+  if (useCNpm && !forceNpm) {
     command = 'cnpm';
     args = ['install', '--save'].filter(e => e);
-  } else if (useYarn) {
+  } else if (useYarn && !forceNpm) {
     command = 'yarn';
     args = ['add']
   } else {
     command = 'npm';
     args = ['install', '--save'].filter(e => e);
   }
-  args = args.concat(dependencies(), devDependencies());
+  args = args.concat(dependencies(), devDependencies({ tag }));
   console.log(chalk.green(`find command ${command} available`));
   console.log(chalk.green(`exec command ${ command + " " + args.join(" ") }`));
   const proc = spawn.sync(command, args, { stdio: 'inherit' });
@@ -73,16 +73,21 @@ const createDir = (name, options) => {
 }
 
 program.version(packageJson.version)
-program.command('init <name>').action((name) => {
-  const root = path.resolve(cwd, name);
-  createDir(name);
-  process.chdir(root);
-  const currentPath = process.cwd();
-  renderPackageJson(name);
-  installDependencies()
-  const initScriptPath = path.resolve(currentPath, 'node_modules', 'ayano-script', 'lib/scripts/init.js');
-  const init = require(initScriptPath);
-  init();
+program.command('init <name>')
+  .option('-t, --tag [tag]', 'install mum-script with tag')
+  .option('-npm, --npm', 'force use npm')
+  .action((name, options) => {
+    const root = path.resolve(cwd, name);
+    const tag = options.tag;
+    const forceNpm = options.npm;
+    createDir(name);
+    process.chdir(root);
+    const currentPath = process.cwd();
+    renderPackageJson(name);
+    installDependencies({ forceNpm, tag })
+    const initScriptPath = path.resolve(currentPath, 'node_modules', 'ayano-script', 'lib/scripts/init.js');
+    const init = require(initScriptPath);
+    init({ tag });
 })
 
 program.parse(process.argv);
