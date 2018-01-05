@@ -1,6 +1,6 @@
 {
   "name": "ayano",
-  "version": "1.0.0-alpha1",
+  "version": "1.0.0-alpha2",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
@@ -17,7 +17,7 @@
   "author": "century guo",
   "license": "MIT",
   "dependencies": {
-    "ayano-utils": "^1.0.0",
+    "ayano-utils": "^1.0.1",
     "chalk": "^2.1.0",
     "commander": "^2.11.0",
     "react-dev-utils": "^3.1.1"

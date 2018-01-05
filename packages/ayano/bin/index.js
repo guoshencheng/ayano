@@ -7,8 +7,7 @@ const chalk = require('chalk');
 const cwd = process.cwd();
 const fs = require('fs');
 const path = require('path');
-
-const { shouldUseCNPM, shouldUseYarn, npmInstallTag } = require('ayano-utils/lib/version.js');
+const { shouldUseCNPM, shouldUseYarn, npmInstallTag } = require('ayano-utils/dist/version.js');
 
 const useCNpm = shouldUseCNPM();
 
@@ -31,7 +30,7 @@ const renderPackageJson = (name, options) => {
 const buildPackageJson = (name, options) => {
   return {
     name,
-    version: '0.1.0',
+    version: '1.0.0',
     private: true
   }
 }
@@ -75,7 +74,7 @@ const createDir = (name, options) => {
 program.version(packageJson.version)
 program.command('init <name>')
   .option('-t, --tag [tag]', 'install mum-script with tag')
-  .option('-npm, --npm', 'force use npm')
+  .option('-n, --npm', 'force use npm')
   .action((name, options) => {
     const root = path.resolve(cwd, name);
     const tag = options.tag;
