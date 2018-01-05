@@ -7,7 +7,8 @@ const chalk = require('chalk');
 const cwd = process.cwd();
 const fs = require('fs');
 const path = require('path');
-const { shouldUseYarn, shouldUseCNPM } = require('../lib/utils.js');
+
+const { shouldUseCNPM, shouldUseYarn } = require('ayano-utils/lib/version.js');
 
 const useCNpm = shouldUseCNPM();
 
