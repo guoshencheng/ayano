@@ -1,13 +1,13 @@
-function log(...arguments) {
-  console.log(`ayano log → `, ...arguments);
+function log(...argument) {
+  console.log(`ayano log → `, ...argument);
 }
 
-function warn(...arguments) {
-  console.warn(`ayano warn → `, ...arguments);
+function warn(...argument) {
+  console.warn(`ayano warn → `, ...argument);
 }
 
-function error(...arguments) {
-  console.warn(`ayano warn → `, ...arguments);
+function error(...argument) {
+  console.warn(`ayano warn → `, ...argument);
 }
 
 export default {
