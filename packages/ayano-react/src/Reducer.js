@@ -16,11 +16,11 @@ root.use('guoshencehng', reducer);
 ```
  */
 
-import { is } from 'ayano-utils';
+import { is, TYPES } from 'ayano-utils';
 import { combineReducers } from 'redux';
 
 function isVaildOldReducerChild(reducer) {
-  if (reducer.reducers && is.object(reducer.reducers)) {
+  if (reducer.reducers && is(TYPES.Object)(reducer.reducers)) {
     return true;
   } else {
     return false;
@@ -36,12 +36,12 @@ export default class Reducer {
     this.originReducer = {}; // redux reducer的处理方法
   }
   useOriginReducer(key, fn) {
-    if (is.fn(fn)) {
+    if (is(TYPES.Function)(fn)) {
       this.originReducer[key] = fn;
     }
   }
   use(key, fn) {
-    if (is.fn(fn)) {
+    if (is(TYPES.Function)(fn)) {
       this.handlers[key] = fn;
     } else if(fn instanceof Reducer) {
       this.reducers[key] = fn;
@@ -96,7 +96,7 @@ Reducer.fromOldReducer = function(reducers, prefix) {
     const current = new Reducer({ prefix, defaultState })
     Object.keys(reducers.reducers).forEach(key => {
       const reducer = reducers.reducers[key];
-      if (is.fn(reducer)) {
+      if (is(TYPES.Function)(reducer)) {
         current.use(key, reducer);
       } else {
         current.use(key, Reducer.fromOldReducer(reducer))

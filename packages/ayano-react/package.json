@@ -21,6 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
+    "ayano-utils": "^1.0.3",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",

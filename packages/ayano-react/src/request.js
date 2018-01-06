@@ -1,4 +1,4 @@
-import { is } from 'ayano-utils';
+import { is, TYPES } from 'ayano-utils';
 import axios from 'axios';
 
 const _methods = ['get', 'post', 'delete', 'put', 'patch', 'options', 'head']
@@ -85,7 +85,7 @@ export default class Request {
       delete config.sender;
       delete config.onError;
       delete config.handleResponse;
-      const url = is.fn(api.path) ? api.path(data) : api.path;
+      const url = is(TYPES.Function)(api.path) ? api.path(data) : api.path;
       const params = searchParamsBuilder(data, { method: api.method });
       const bodyData = bodyDataBuilder(data, { method: api.method });
       return sender(Object.assign({ url, params, data: bodyData }, config))
