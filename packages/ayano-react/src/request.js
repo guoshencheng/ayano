@@ -1,80 +1,103 @@
-import { is } from './utils';
+import { is } from 'ayano-utils';
 import axios from 'axios';
 
-const _handleResponse = (response) => {
-  return response.data;
-}
+const _methods = ['get', 'post', 'delete', 'put', 'patch', 'options', 'head']
 
-const _catchError = (error) => {
-  console.log(error)
-}
+export const methods = _methods.reduce((pre, cur) => {
+  pre[cur] = cur;
+  return pre;
+}, {})
 
-const buildRequestParams = (method, url, headers, data, options) => {
-  let params = Object.assign({}, {
-    method, url, headers,
-    params: method == "GET" || method == "DELETE" ? data : void 6,
-    data: method == "PUT" || method == "POST" ? data : void 6
-  }, options)
-  // to delete function params at options
-  Object.keys(params).forEach(key => {
-    if (is.fn(params[key])) {
-      delete params[key];
-    }
-  })
-  return params;
-}
+const DEFAULT_METHOD = methods.get;
 
-const buildHeders = (apis, key, data) => {
-  const api = apis[key];
-  if (is.fn(api.headers)) {
-    return api.headers(data)
+export const searchParamsBuilder = (data, api) => {
+  const method = api.method || DEFAULT_METHOD;
+  if ([methods.get, methods.delete, methods.headers, methods.options].indexOf(method.toLowerCase()) > -1) {
+    return data;
   } else {
-    return api.headers;
+    return void 0;
   }
 }
 
-const buildUrl = (host, apis, key, data) => {
-  if (is.fn(key)) {
-    return key(data)
-  } else if (is.fn(apis[key].path)) {
-    return apis[key].path(data)
+export const bodyDataBuilder = (data, api) => {
+  const method = api.method || DEFAULT_METHOD;
+  if ([methods.get, methods.delete, methods.headers, methods.options].indexOf(method.toLowerCase()) > -1) {
+    return void 0;
   } else {
-    return `${host}${ apis[key] ? apis[key].path : key}`
+    return data;
   }
 }
 
-const sendRequest = (apis, key, data, method, options, opt) => {
-    const host = apis.host || '';
-    const handleResponse = options.handleResponse || opt.handleResponse || _handleResponse;
-    const catchError = options.catchError || opt.catchError || _catchError;
-    let url = buildUrl(host, apis, key, data);
-    const headers = buildHeders(apis, key, data);
-    const params = buildRequestParams(method, url, headers, data, options);
-    return axios(params).then(handleResponse).catch(catchError)
-}
+export default class Request {
+  static defaultConfig = {
+    timeout: 10000,
+    searchParamsBuilder: searchParamsBuilder,
+    bodyDataBuilder: bodyDataBuilder
+  }
 
-export const methods = {
-  get: "GET", put: "PUT", post: "POST", delete: "DELETE"
-}
+  /**
+   *  config.baseURL
+   *  config.headers
+   *  config.timeout
+   *  config.searchParamsBuilder
+   *  config.bodyDataBuilder
+   */
+  constructor(config) {
+    this.apis = {};
+    this.setConfig(config)
+  }
 
-export const request = (apis, opt) => {
-  opt = opt || {};
-  const _apis = Object.keys(apis).filter(i => i != 'host').reduce((pre, key) => {
-    const api = apis[key];
-    pre[key] = (data, options) =>  {
-      options = options || {};
-      const method = api.method;
-      return sendRequest(apis, key, data, method, options, opt);
+  toApis() {
+    const handler = {
+      get(target, name) {
+        return target.apis[name]
+      },
+      set(target, name, value) {
+        throw new Error("禁止为apis设置属性")
+      }
     }
-    return pre;
-  }, {})
-  let _request = (key, data, method, options) => {
-    options = options || {};
-    if (apis[key]) {
-      return reqs[key]
-    } else {
-      return sendRequest(apis, key, data, method, options, opt);
+    return new Proxy(this, handler);
+  }
+
+  setConfig(config) {
+    const apis = config.apis;
+    config = Object.assign({}, config);
+    delete config.apis;
+    this.defaultConfig = Object.assign({}, Request.defaultConfig, config);
+    const axiosConfig = Object.assign({}, this.defaultConfig);
+    delete axiosConfig.searchParamsBuilder;
+    delete axiosConfig.bodyDataBuilder;
+    this.axios = axios.create(axiosConfig);
+    if (apis) {
+      this.setApis(apis);
     }
   }
-  return Object.assign(_apis, { request: _request })
+
+  buildRequest(api) {
+    const method = api.method || DEFAULT_METHOD;
+    return (data, config) => {
+      config = Object.assign({}, config);
+      const bodyDataBuilder = config.bodyDataBuilder || api.bodyDataBuilder || this.defaultConfig.bodyDataBuilder;
+      const searchParamsBuilder = config.searchParamsBuilder || api.searchParamsBuilder || this.defaultConfig.searchParamsBuilder;
+      const sender = config.sender || this.axios;
+      delete config.bodyDataBuilder;
+      delete config.searchParamsBuilder;
+      delete config.sender;
+      delete config.onError;
+      delete config.handleResponse;
+      const url = is.fn(api.path) ? api.path(data) : api.path;
+      const params = searchParamsBuilder(data, { method: api.method });
+      const bodyData = bodyDataBuilder(data, { method: api.method });
+      return sender(Object.assign({ url, params, data: bodyData }, config))
+    }
+  }
+
+  setApis(apis) {
+    this._apis = apis;
+    this.apis = Object.keys(apis).reduce((pre, key) => {
+      const api = apis[key];
+      pre[key] = this.buildRequest(api);
+      return pre;
+    }, {})
+  }
 }
