@@ -1,151 +1,45 @@
-import { applyMiddleware, createStore } from 'redux';
-import { Provider, connect } from 'react-redux';
-import createHistory from 'history/createHashHistory';
-import ayanoThunk from './thunk.js';
-import reduxThunk from 'redux-thunk';
-import { routerMiddleware } from 'react-router-redux';
-import { Route, Switch } from 'react-router-dom';
-import { ConnectedRouter, routerReducer } from 'react-router-redux';
-import { bindActionCreators } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
-import { render } from 'react-dom';
-import { request } from './request';
-import { is, analysisRouteTree, buildReducers } from './utils';
-import { buildConstantsTree, buildConstants, buildConstantToAction } from './constant.js';
+import { connect } from 'react-redux';
+// local lib
+import Reducer from './Reducer';
+import Request, { methods } from './Request';
+import Router, { RouterRenderer } from './Router';
+import AppRenderer from './AppRenderer';
+import AppManager from './AppManager';
+import App from './App';
+import { logger } from 'ayano-utils';
+import { patchFn } from './utils';
+import withAyanoActionBuilder from './withAyanoAction';
+import thunk from './thunk';
 
-let _actions = {}
+const withAyanoAction = withAyanoActionBuilder(AppManager);
 
+// export
+exports.Reducer = Reducer;
+exports.Request = Request;
+exports.methods = methods;
+exports.Router = Router;
+exports.AppRenderer = AppRenderer;
+exports.RouterRenderer = RouterRenderer;
+exports.withAyanoAction = withAyanoAction;
+exports.thunk = thunk;
 
-/**
- * handle router tree like
-{
-  c1: {
-    path: 'c1',
-    children: {
-      c2: {
-        path: '/c2',
-        component: c2
-      },
-      c3: {
-        path: '/c3',
-        component: c3
-      }
-    }
-  }
-}
-*/
-
-export const CustomRouter = (history, routers) => (
-  <ConnectedRouter history={ history }>
-    <div>
-      <Switch>
-      {
-        routers.map(router => {
-          return <Route key={ router.path } { ...router }/>
-        })
-      }
-      </Switch>
-    </div>
-  </ConnectedRouter>
-)
-
-export * from './utils.js';
-export * from './request';
-export * from './constant.js';
-export { default as ayanoThunk } from './thunk.js';
-
-export const connectApp = (mapState) => (component) => {
-  return connect(mapState, () => ({ actions: _actions }))(component);
+export const connectAyano = (mapState) => (Component) => {
+  return withAyanoAction(connect(mapState)(Component));
 }
 
 /**
- * [createApp create ayano app]
- * @param  {Object} options [description]
- *  |- @param  {Object} constants [redux action type]
- *  |- @param  {Object} actions [redux actions]
- *  |- @param  {Object} reducers [redux reducers] or [ a reducers set ]
- *  |- @param  {Object || Array} routers [routers to build react-router-dom Route]
- *  |- @param  {Object} apis [ request route api describe object ]
- *  |- @param  {Object} history [ react-router history default is hash history]
- *  |- @param  {Object} hooks [ global hooks for handle error or others ]
- *  |- @param  {Object} auto [ open [AUTO MODE] to do things more sinple ]
- *  |- @param  {Object} prefix [ a prefix to auto generate a constants by reducers ]
+ * options.name 创建的APP的名字，如果有多个app的话，可以根据name进行管理
+ * options.reducer  一个 MUM REACT REDUCER的对象 必须
+ * options.actions 一个 actions的集合 必须
+ * options.router 一个 MUM REACT ROUTER的对象 必须
+ * options.request 一个MUM REACT REQUEST请求的参数的配置文件 可选
+ * options.history 关系到router的使用，应用所用到的 history 默认为hashHistory
+ * options.middlewares 可选，redux中间件，会覆盖所有的中间件来使用用户的设置
  */
+
 export const createApp = (options) => {
-  // init params at options
-  let constants = options.constants || {};
-  const actions = options.actions || {};
-  let reducers = options.reducers || ((state = {}, action) => (state));
-  const routers = options.routers || [];
-  const apis = options.apis || [];
-  const history = options.history || createHistory();
-  const hooks = options.hooks || {};
-  const auto = options.auto || false;
-  const customThunk = options.customThunk;
-  const prefix = options.prefix || "";
-
-  const thunk = !!customThunk ? ayanoThunk : reduxThunk;
-
-  // init request apis use apis[key](data) to send request. example: apis.login({ username: 'century guo', password: 'bestsoftwareengine' })
-  const { onRequestError, onHandleRequest } = hooks;
-  const _apis = request(apis, { handleResponse: onHandleRequest, catchError: onRequestError });
-
-  // create routers
-  let RouterComponent;
-  let _routers;
-  if (is.fn(routers)) {
-    RouterComponent = routers(history);
-    if (!RouterComponent) {
-      console.warn(`the router function should return a component`);
-    }
-  } else {
-    _routers = analysisRouteTree(routers);
-    RouterComponent = CustomRouter(history, Object.keys(_routers).map(k => _routers[k]));
-  }
-
-  if (auto) {
-    if (is.object(reducers)) {
-      const _constants = constants;
-      const tree = buildConstantsTree(reducers);
-      constants = buildConstants(tree, prefix);
-      constants = Object.assign({}, constants, { extra: _constants })
-      reducers = buildReducers(reducers, prefix, void 6, { router: routerReducer } );
-    }
-  }
-
-  let _reducers = {}
-  // init middlewares, inject some props which can be use in actions (dispatch, state, { apis, constants, actions }) => { ... } to see: https://github.com/gaearon/redux-thunk#injecting-a-custom-argument
-  let middlewares = options.middlewares || [ thunk.withExtraArgument({ apis: _apis, constants, actions: _actions, routers: _routers }), routerMiddleware(history) ];
-
-  // init store
-  const store = createStore(reducers, composeWithDevTools(applyMiddleware(...middlewares)));
-
-  // bind action with dispath
-  const { dispatch } = store;
-
-  const buildAction = (constant) => {
-    return (action) => {
-      dispatch(Object.assign({}, action, { type: constant }))
-    }
-  }
-  const constantActions = buildConstantToAction(constants, buildAction, _reducers);
-  Object.keys(actions).reduce((pre, key) => {
-    const value = actions[key];
-    pre[key] = bindActionCreators(value, dispatch);
-    return pre;
-  }, _actions);
-  _actions.reducerActions = _reducers;
-
-  // return app object
-  return {
-    _history: history, _store: store, _actions: _actions, _apis: _apis, _routers,
-    start: (element) => {
-      render(
-        <Provider store={ store }>
-          { RouterComponent }
-        </Provider>,
-        element
-      )
-    }
-  }
+  var app = new App(options);
+  patchFn(app, AppRenderer);
+  AppManager.set(options.name, app);
+  return app;
 }
