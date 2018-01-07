@@ -1,6 +1,6 @@
 {
   "name": "ayano-utils",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "ayano common utils",
   "main": "dist/index.js",
   "scripts": {

@@ -10,7 +10,6 @@ export const npmInstallTag = pacakageJson => packageName => tag => {
   }
 }
 
-
 export const shouldUseCNPM = () => {
   var { execSync } = require('child_process');
   try {
