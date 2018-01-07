@@ -16,12 +16,15 @@ export default {
   // 渲染这个应用
   render(Layout) {
     this.prepare && this.prepare();
+    const component = Layout ? (
+      <Layout>
+        {this.renderRouter()}
+      </Layout>
+    ) : this.renderRouter();
     Layout = Layout || (({ children }) => (children));
     return (
       <Provider store={this.store}>
-        <Layout>
-          {this.renderRouter()}
-        </Layout>
+        { component }
       </Provider>
     )
   },
