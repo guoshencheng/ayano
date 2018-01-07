@@ -21,7 +21,6 @@ export default {
         {this.renderRouter()}
       </Layout>
     ) : this.renderRouter();
-    Layout = Layout || (({ children }) => (children));
     return (
       <Provider store={this.store}>
         { component }
