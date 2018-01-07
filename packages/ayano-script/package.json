@@ -1,6 +1,6 @@
 {
   "name": "ayano-script",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
@@ -9,7 +9,7 @@
     "prepublish": "npm run build"
   },
   "related": {
-    "ayano-react": "1.0.1"
+    "ayano-react": "1"
   },
   "bin": "bin/index.js",
   "main": "bin/index.js",
