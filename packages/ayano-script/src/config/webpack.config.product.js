@@ -1,46 +1,14 @@
-var webpack = require('webpack')
-var path = require('path')
-var fs = require('fs')
-var base = require('./webpack.config.dev.js');
-var pxtorem = require('postcss-pxtorem');
-const appDirectory = process.cwd();
-const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-const appPackageJson = resolveApp('./package.json');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
-var SakuraWebpackPlugin = require('sakura-webpack-plugin');
+import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import SakuraWebpackPlugin from 'sakura-webpack-plugin';
+import base from './webpack.config.common';
+import { mapStyleProduct } from './getStyleLoaders';
+import { readConfig } from './manager';
+import getDefineValue from './getDefineValue';
+
 var production = Object.assign({}, base);
-
-var packageJson = {};
-
-try {
-  packageJson = require(appPackageJson) || {};
-} catch (e) {
-  packageJson = {};
-  console.log(e)
-}
-
-const ayanoConfig = packageJson['ayano-config'] || { };
-var disablePx2Rem = ayanoConfig['disablePx2Rem'];
-let resourcePrefix = ayanoConfig.resourcePrefix || "";
-let resourceDescribeFileName = ayanoConfig.resourceDescribeFileName || 'resources.json';
-
-var postcssPlugins = [];
-
-if (!disablePx2Rem) {
-  postcssPlugins = postcssPlugins.concat([pxtorem({
-    rootValue: 100,
-    propWhiteList: [], // don't use propList.
-  })])
-}
-
-var postcssLoader = {
-  loader: "postcss-loader",
-  options: {
-    postcss: {},
-    plugins: (loader) => postcssPlugins
-  }
-}
-
+var config = readConfig();
+var defineValue = getDefineValue();
 
 var cssLoader = {
   loader: "css-loader",
@@ -58,38 +26,17 @@ production.entry = Object.keys(base.entry).reduce((pre, cur) => {
   }
 }, {});
 
-production.output = {
-  path: path.resolve(__dirname, './public/dist'),
+production.output = Object.assign({}, base.output, {
   filename: "[name].[hash].js",
-}
-
-production.module.loaders = base.module.loaders.map((value) => {
-  if ( value.test.test("a.scss")) {
-    return {
-      test: /\.scss$/,
-      loader: ExtractTextPlugin.extract({
-        fallback: "style-loader",
-        use: [cssLoader, "sass-loader", postcssLoader]
-      })
-    }
-  } else if ( value.test.test("a.css") ) {
-    return {
-      test: /\.css$/,
-      loader: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [cssLoader, postcssLoader]
-      })
-     };
-  } else {
-    return value;
-  }
 })
+
+production.module.loaders = mapStyleProduct(base.module.loaders);
 
 production.plugins = [
   new SakuraWebpackPlugin({
-    prefix: resourcePrefix,
+    prefix: config.resourcePrefix,
     single: true,
-    resourceFileName: resourceDescribeFileName
+    resourceFileName: config.resourceDescribeFileName
   }),
   new webpack.optimize.UglifyJsPlugin({
     compress: {
@@ -101,9 +48,12 @@ production.plugins = [
     'process.env': {
       NODE_ENV: JSON.stringify('production'),
     },
+    DEFINE_VALUE: defineValue
   }),
 ]
 
 production.devtool = "";
 
-module.exports = production;
+const { webpackConfigBuilder } = config;
+
+module.exports = webpackConfigBuilder(production);
