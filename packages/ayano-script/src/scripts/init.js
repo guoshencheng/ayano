@@ -83,13 +83,13 @@ const install = (deps, options = {}) => {
   }
 }
 
-const installDevDependencies = ({ tag }) => {
-  install(devDependencies({ tag }), { npm: options.npm, dev: true });
+const installDevDependencies = ({ tag, npm }) => {
+  install(devDependencies({ tag }), { npm, dev: true });
 }
 
 
-const installDependencies = ({ tag }) => {
-  install(dependencies({ tag }), { npm: options.npm, dev: false });
+const installDependencies = ({ tag, npm }) => {
+  install(dependencies({ tag }), { npm, dev: false });
 }
 
 module.exports = ({ tag }) => {

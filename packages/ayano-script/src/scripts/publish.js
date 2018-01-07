@@ -15,7 +15,7 @@ import path from 'path';
 import chalk from 'chalk';
 import axios from 'axios';
 import fs from 'fs';
-import { readConfig } from '../config/manager';
+import readConfig from '../config/readConfig';
 
 const defaultPrefix = 'env_';
 const publishConfigKey = 'publish';

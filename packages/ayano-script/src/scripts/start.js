@@ -13,7 +13,7 @@ import clearConsole from 'react-dev-utils/clearConsole';
 import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles';
 import { choosePort, createCompiler, prepareProxy, prepareUrls } from 'react-dev-utils/WebpackDevServerUtils';
 import openBrowser from 'react-dev-utils/openBrowser';
-var readConfig = require('../config/readConfig');
+import readConfig from '../config/readConfig';
 var ayanoConfig = readConfig();
 
 import paths from '../config/paths.js';
