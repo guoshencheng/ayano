@@ -5,11 +5,10 @@ import chalk from 'chalk';
 import path from 'path';
 import packageJson from '../../package.json';
 const spawn = require('react-dev-utils/crossSpawn');
-import { shouldUseYarn, shouldUseCNPM } from '../utls.js';
-import { version } from 'ayano-utiles';
+import { version } from 'ayano-utils';
+const { npmInstallTag, shouldUseYarn, shouldUseCNPM } = version;
 const useYarn = shouldUseYarn();
 const useCNpm = shouldUseCNPM();
-const { npmInstallTag } = version;
 
 const buildScripts = () => ({
   start: 'ayano-script start',

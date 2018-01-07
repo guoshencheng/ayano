@@ -1,4 +1,4 @@
-import { runCmd } from 'ayano-utils';
+var { runCmd } = require('ayano-utils');
 var version = require('../package.json').version;
 var pubtag = '--ayano-publish'
 var chalk = require('chalk');

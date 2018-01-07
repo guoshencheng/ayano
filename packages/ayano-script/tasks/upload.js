@@ -1,6 +1,6 @@
 var qiniu = require('gulp-qiniu');
 var paths = require('../lib/config/paths.js');
-const readConfig = require('../src/config/readConfig');
+const readConfig = require('../lib/config/readConfig').default;
 
 var resolveApp = paths.resolveApp;
 
