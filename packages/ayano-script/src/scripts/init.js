@@ -31,10 +31,9 @@ const copyTemplate = (target) => {
   fs.copySync(templatePath, target);
 }
 
-const mumReactKey = 'mum-react';
-const mumComonentsKey = 'mum-components';
 const dependencies = ({ tag }) => {
   let deps = [];
+  deps = deps.concat(['antd-mobile']);
   deps = deps.concat(npmInstallTag(packageJson)('ayano-react')(tag));
   return deps;
 }
