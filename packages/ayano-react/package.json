@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel example/index.html --no-cache",
     "build": "babel src -d dist",
     "dev": "babel src -d dist -w",
     "prepublish": "npm run build"
@@ -21,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
-    "ayano-utils": "^1.0.3",
+    "ayano-utils": "^1.0.5",
     "hoist-non-react-statics": "^2.3.1",
     "path-to-regexp": "^2.1.0",
     "prop-types": "^15.6.0",

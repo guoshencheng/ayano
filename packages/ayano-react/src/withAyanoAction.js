@@ -10,7 +10,7 @@ export default (AppManager) => (Component, name) => {
       <Component {...remainingProps} actions={app.actions} toPath={app.toPath} reducers={app.reducerActions} ></Component>
     )
   }
-  C.displayName = `mumConnect(${Component.displayName || Component.name})`
+  C.displayName = `ayanoConnect(${Component.displayName || Component.name})`
   C.WrappedComponent = Component
   C.propTypes = {
     wrappedComponentRef: PropTypes.func
