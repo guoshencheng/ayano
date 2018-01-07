@@ -1,6 +1,6 @@
 {
   "name": "ayano-react",
-  "version": "1.0.0-alpha2",
+  "version": "1.0.0-alpha3",
   "description": "react app creator",
   "main": "dist/index.js",
   "scripts": {
@@ -22,7 +22,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
-    "ayano-utils": "^1.0.5",
+    "ayano-utils": "^1.0.8",
     "hoist-non-react-statics": "^2.3.1",
     "path-to-regexp": "^2.1.0",
     "prop-types": "^15.6.0",
