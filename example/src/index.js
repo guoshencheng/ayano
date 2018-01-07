@@ -1,39 +1,40 @@
-import { render } from 'react-dom';
-import { Provider } from 'react-redux';
+import ReactDOM from 'react-dom';
+import React from 'react';
 import { Toast, Popup } from 'antd-mobile';
 import { createApp } from 'ayano-react';
+import router, { App } from './router';
+import pathToRegexp from 'path-to-regexp';
+import { AppContainer } from 'react-hot-loader';
 
-//redux actions and reducers
-import reducers from './scripts/reducers';
+import reducer from './scripts/reducer';
 import * as actions from './scripts/actions';
+import request from './scripts/request.js';
+import './index.less';
 
-// NEW FEATURE: this is deprecated with option auto true and object type reducer
-console.warn(` ayano-REACT!!! NEW FEATURE: src/index.js line 12 deprecated with option auto true and object type reducer`);
-import constants from './scripts/constants.js';
+var app = createApp({ reducer, actions, request, router })
 
-// api routers define
-import apis from './scripts/apis.js';
-
-//router components
-import Home from './views/Home/Home.js';
-
-import './index.scss';
-
-const routers = {
-  home: {
-    path: '/',
-    component: Home,
-  },
-  a: {
-    path: '/a',
-    children: {
-      a1: {
-        path: '/:id/a1',
-        component: Home
-      }
-    }
-  }
+const Layout = ({ children }) => {
+  return (
+    <div>
+      { children }
+    </div>
+  )
 }
 
-const app = createApp({ reducers, routers, actions, apis, constants, auto: true, customThunk: true, prefix: "@ayano-react" });
-app.start(document.querySelector('#root'));
+const render = component => {
+  console.log('rendering...')
+  ReactDOM.render(
+    <AppContainer warnings={false}>
+      {component}
+    </AppContainer>,
+    document.getElementById('root'))
+}
+
+if (module.hot) {
+  module.hot.accept('./router', () => {
+    const router = require('./router').default;
+    app.updateRouter(router);
+    render(app.render(Layout))
+  })
+}
+render(app.render(Layout));

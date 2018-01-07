@@ -10,14 +10,16 @@ const init = require('../lib/scripts/init');
 const start = require('../lib/scripts/start');
 const build = require('../lib/scripts/build');
 const publish = require('../lib/scripts/publish');
-
-const outputConfig = require('../lib/scripts/outputConfig.js');
+const gulp = require('gulp');
+require('../gulpfile.js');
 
 program.version(packageJson.version);
 
-program.command('init').action((name) => {
-  init(name);
+program.command('init')
+.option('-npm, --npm', 'force use npm').action((options) => {
+  init({ npm: options.npm });
 })
+
 program.command('build')
 .option('-c, --config [config]', "webpack config file path").action((command) => {
   const { config } = command;
@@ -35,11 +37,6 @@ program.command('build')
     build();
   }
 })
-
-program.command('outputConfig')
-.action(() => {
-  outputConfig()
-});
 
 program.command('publish')
 .option('-m, --comment [comment]')
@@ -68,6 +65,10 @@ program.command('start')
   } else {
     start();
   }
+})
+
+program.command('upload').action(command => {
+  gulp.start('upload');
 })
 
 program.parse(process.argv);

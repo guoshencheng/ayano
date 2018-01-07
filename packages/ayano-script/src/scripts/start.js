@@ -1,4 +1,3 @@
-
 // process configration
 process.env.BABEL_ENV = 'development';
 process.env.NODE_ENV = 'development';
@@ -14,6 +13,8 @@ import clearConsole from 'react-dev-utils/clearConsole';
 import checkRequiredFiles from 'react-dev-utils/checkRequiredFiles';
 import { choosePort, createCompiler, prepareProxy, prepareUrls } from 'react-dev-utils/WebpackDevServerUtils';
 import openBrowser from 'react-dev-utils/openBrowser';
+import readConfig from '../config/readConfig';
+var ayanoConfig = readConfig();
 
 import paths from '../config/paths.js';
 import createDevServerConfig from '../config/webpackDevServer.config.js';
@@ -37,8 +38,8 @@ module.exports = (configPath) => {
     const appName = require(paths.appPackageJson).name;
     const urls = prepareUrls(protocol, HOST, port);
     const compiler = createCompiler(webpack, config, appName, urls, useYarn);
-    const proxySetting = require(paths.appPackageJson).proxy;
-    const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
+    const proxySetting = ayanoConfig.proxy;
+    const proxyConfig = prepareProxy(proxySetting, config.output.publicPath);
     const serverConfig = createDevServerConfig(
       proxyConfig,
       urls.lanUrlForConfig,

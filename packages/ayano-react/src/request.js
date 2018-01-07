@@ -29,11 +29,12 @@ export const bodyDataBuilder = (data, api) => {
 }
 
 export default class Request {
-  static defaultConfig: {
+  static defaultConfig = {
     timeout: 10000,
     searchParamsBuilder: searchParamsBuilder,
     bodyDataBuilder: bodyDataBuilder
   }
+
 
   /**
    *  config.baseURL

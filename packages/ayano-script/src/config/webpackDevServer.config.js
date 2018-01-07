@@ -1,6 +1,5 @@
 import errorOverlayMiddleware from 'react-error-overlay/middleware';
 import noopServiceWorkerMiddleware from 'react-dev-utils/noopServiceWorkerMiddleware';
-import config from './webpack.config.dev.js';
 import paths from './paths';
 
 const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
