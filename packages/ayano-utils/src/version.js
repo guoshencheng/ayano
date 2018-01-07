@@ -1,5 +1,3 @@
-import { execSync } from 'child_process';
-
 export const npmInstallTag = pacakageJson => packageName => tag => {
   if (tag) {
     return `${packageName}@${tag}`
@@ -14,6 +12,7 @@ export const npmInstallTag = pacakageJson => packageName => tag => {
 
 
 export const shouldUseCNPM = () => {
+  var { execSync } = require('child_process');
   try {
     execSync('cnpm --version', { stdio: 'ignore' });;
     return true;
@@ -23,6 +22,7 @@ export const shouldUseCNPM = () => {
 }
 
 export const shouldUseYarn = () => {
+  var { execSync } = require('child_process');
   try {
     execSync('yarnpkg --version', { stdio: 'ignore' });
     return true;
