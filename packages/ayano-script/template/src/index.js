@@ -13,11 +13,19 @@ import './index.less';
 
 var app = createApp({ reducer, actions, request, router })
 
-const render = Component => {
+const Layout = ({ children }) => {
+  return (
+    <div>
+      { children }
+    </div>
+  )
+}
+
+const render = component => {
   console.log('rendering...')
   ReactDOM.render(
     <AppContainer warnings={false}>
-      <Component />
+      {component}
     </AppContainer>,
     document.getElementById('root'))
 }
@@ -26,7 +34,7 @@ if (module.hot) {
   module.hot.accept('./router', () => {
     const router = require('./router').default;
     app.updateRouter(router);
-    render(app.render)
+    render(app.render(Layout))
   })
 }
-render(app.render);
+render(app.render(Layout));

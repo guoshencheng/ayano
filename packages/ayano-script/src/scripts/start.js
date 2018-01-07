@@ -38,7 +38,7 @@ module.exports = (configPath) => {
     const appName = require(paths.appPackageJson).name;
     const urls = prepareUrls(protocol, HOST, port);
     const compiler = createCompiler(webpack, config, appName, urls, useYarn);
-    const proxySetting = ayanoConfig.proxy || {};
+    const proxySetting = ayanoConfig.proxy;
     const proxyConfig = prepareProxy(proxySetting, config.output.publicPath);
     const serverConfig = createDevServerConfig(
       proxyConfig,

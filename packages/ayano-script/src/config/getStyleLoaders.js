@@ -1,7 +1,7 @@
 import fs from 'fs';
 import paths from './paths';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import { readConfig }  from './manager';
+import readConfig from './readConfig';
 const config = readConfig();
 const hasPostcssConfig = fs.existsSync(paths.postcssConfigFile);
 

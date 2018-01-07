@@ -1,6 +1,6 @@
 {
   "name": "ayano-script",
-  "version": "1.0.0-alpha3",
+  "version": "1.0.0",
   "description": "a command to create react app",
   "scripts": {
     "build": "babel src -d lib --presets=es2015",
@@ -9,7 +9,7 @@
     "prepublish": "npm run build"
   },
   "related": {
-    "ayano-react": "next"
+    "ayano-react": "1.0.1"
   },
   "bin": "bin/index.js",
   "main": "bin/index.js",
@@ -18,7 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "axios": "^0.16.2",
-    "ayano-utils": "^1.0.7",
+    "ayano-utils": "^1.0.9",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
     "babel-plugin-import": "^1.4.0",

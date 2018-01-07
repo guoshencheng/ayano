@@ -1,4 +1,4 @@
-var { runCmd } = require('ayano-utils');
+var runCmd = require('ayano-utils/dist/runCmd').default;
 var version = require('../package.json').version;
 var pubtag = '--ayano-publish'
 var chalk = require('chalk');

@@ -5,8 +5,7 @@ import chalk from 'chalk';
 import path from 'path';
 import packageJson from '../../package.json';
 const spawn = require('react-dev-utils/crossSpawn');
-import { version } from 'ayano-utils';
-const { npmInstallTag, shouldUseYarn, shouldUseCNPM } = version;
+import { npmInstallTag, shouldUseYarn, shouldUseCNPM } from 'ayano-utils/dist/version';
 const useYarn = shouldUseYarn();
 const useCNpm = shouldUseCNPM();
 
@@ -62,10 +61,10 @@ const install = (deps, options = {}) => {
   const saveOption = dev ? '--save-dev' : '--save'
   if (useCNpm && !npm) {
     command = 'cnpm';
-    args = ['install', '--by=npm', saveOption ].filter(e => e);
-  // } else if (useYarn) {
-  //   command = 'yarn';
-  //   args = ['add', '--dev']
+    args = ['install', saveOption ].filter(e => e);
+  } else if (useYarn) {
+    command = 'yarn';
+    args = ['add', '--dev']
   } else {
     command = 'npm';
     args = ['install', saveOption].filter(e => e);

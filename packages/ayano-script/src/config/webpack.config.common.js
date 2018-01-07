@@ -1,67 +1,71 @@
-import fs from 'fs';
-import paths from './paths';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+const webpack = require('webpack');
+const path = require('path');
+const paths = require('./paths.js');
 import readConfig from './readConfig';
-const config = readConfig();
-const hasPostcssConfig = fs.existsSync(paths.postcssConfigFile);
+import { common } from './getStyleLoaders';
+import getDefineValue from './getDefineValue';
+const appDirectory = process.cwd();
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-const cssLoader = {
+var config = readConfig();
+const defineValue = getDefineValue();
+const appIndexJs = resolveApp(config.entry);
+const output = resolveApp(config.output);
+
+var cssLoader = {
   loader: "css-loader",
   options: {
     minimize:  process.env.NODE_ENV == 'production'
   }
 }
 
-const lessLoader = {
-  loader: "less-loader",
-  options: {
-    modifyVars: config.theme || {}
-  }
-}
-
-const origin = [
-  {
-    test: /\.css$/,
-    use: [ 'style-loader', cssLoader ]
+module.exports = {
+  entry: {
+    main: [
+      // 'webpack-hot-middleware/client?timeout=2000&reload=true',
+      require.resolve('react-hot-loader/patch'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      appIndexJs
+    ]
   },
-  {
-    test: /\.scss$/,
-    use: ["style-loader", cssLoader, "sass-loader"]
+  resolve: {
+    extensions: config.extensions,
   },
-  {
-    test: /\.less$/,
-    use: ["style-loader", cssLoader, lessLoader]
-  }
-]
-
-const productStyleLoaderItem = (item) => {
-  return {
-    test: item.test,
-    loader: ExtractTextPlugin.extract({
-      fallback: "style-loader",
-      use: item.use.filter(i => i != 'style-loader')
-    })
-  }
-}
-
-export const checkPostcssLoader = (item) => {
-  return hasPostcssConfig ? Object.assign({}, item, {
-    test: item.test,
-    use: item.test.test('a.less') ? item.use.filter(i => i != 'postcss-loader' && i != lessLoader ).concat(['postcss-loader', lessLoader]) : item.use.filter(i => i != 'postcss-loader').concat(['postcss-loader'])
-  }) : item;
-}
-
-export const common = origin.map(item => {
-  return checkPostcssLoader(item);
-});
-
-export const mapStyleProduct = (loaders) => {
-  const styleTests = origin.map(item => item.test);
-  return loaders.map(item => {
-    if (styleTests.indexOf(item.test) > -1) {
-      return productStyleLoaderItem(checkPostcssLoader(item))
-    } else {
-      return item;
-    }
-  })
+  output: {
+    path: output,
+    filename: "[name].js",
+    publicPath: "/"
+  },
+  externals: config.externals,
+  module: {
+    loaders: common.concat([
+      {
+        test: /.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/,
+        use: [{
+          loader: "url-loader",
+          options: {
+            limit: 8192,
+            name: "images/[name]-[hash].[ext]",
+          },
+        }],
+      }
+    ])
+  },
+  plugins:[
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development'),
+      },
+      DEFINE_VALUE: defineValue
+    }),
+  ],
+  devtool: 'source-map'
 }

@@ -3,7 +3,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import SakuraWebpackPlugin from 'sakura-webpack-plugin';
 import base from './webpack.config.common';
 import { mapStyleProduct } from './getStyleLoaders';
-import { readConfig } from './manager';
+import readConfig from './readConfig';
 import getDefineValue from './getDefineValue';
 
 var production = Object.assign({}, base);
