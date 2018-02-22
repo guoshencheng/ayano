@@ -89,7 +89,7 @@ export default class Request {
       const url = is(TYPES.Function)(api.path) ? api.path(data) : api.path;
       const params = searchParamsBuilder(data, { method: api.method });
       const bodyData = bodyDataBuilder(data, { method: api.method });
-      return sender(Object.assign({ url, params, data: bodyData }, config))
+      return sender(Object.assign({ url, params, data: bodyData, method: api.method }, config))
     }
   }
 
